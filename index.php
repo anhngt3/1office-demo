@@ -40,8 +40,9 @@
                     let title = items.title;
                     title = title.replace("Ronaldo", spanRed('Ronaldo'));
                     title = title.replace("Messi", spanRed('Messi'));
-                    html += '<div class="items" style="margin-bottom: 20px; background-color: aquamarine">';
+                    html += '<div class="items" style="margin-bottom: 20px; background-color: aquamarine; display: flex">';
                     html += '<img src="' + items.image + '">';
+                    html += '<div style="margin-left: 20px ">';
                     html += '<h3>';
                     html += title;
                     html += '</h3>';
@@ -49,6 +50,7 @@
                     html += items.description.replace("Champions", zoomToString('Champions'));
                     html += '</p>';
                     html += '<a href="' + items.link + '">Xem thêm</a>';
+                    html += '</div>';
                     html += '</div>';
                 });
                 $('#box').html(html);
