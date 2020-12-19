@@ -1,70 +1,22 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/custom.css">
-</head>
-<body>
-<div id="box">
+<?php
 
-</div>
-</body>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script>
-    const spanRed = (str) => {
-        return `<span class="color-red">${str}</span>`;
-    };
+// Định nghĩa hằng Path của file index.php
+define('PATH_ROOT', __DIR__);
+include_once (PATH_ROOT . '/connect.php');
+// Autoload class trong PHP
+spl_autoload_register(function ($class_name) {
+    include_once PATH_ROOT . '/' . $class_name . '.php';
+});
 
-    const zoomToString = (str) => {
-        return `<span class="size-20">${str}</span>`;
-    }
-    const hoverTitle = () => {
-        $("h3").hover(
-            function () {
-                $(this).append($("<span> đã hover</span>"));
-            }, function () {
-                $(this).find("span").last().remove();
-            }
-        );
-    };
-    const loadData = () => {
-        $.get("post.php", (data) => {
-            const datas = JSON.parse(data);
-            if (datas.data.length) {
-                let html = '';
-                datas.data.map((items) => {
-                    let title = items.title;
-                    title = title.replace("Ronaldo", spanRed('Ronaldo'));
-                    title = title.replace("Messi", spanRed('Messi'));
-                    html += '<div class="items" style="margin-bottom: 20px; background-color: aquamarine; display: flex">';
-                    html += '<img src="' + items.image + '">';
-                    html += '<div style="margin-left: 20px ">';
-                    html += '<h3>';
-                    html += title;
-                    html += '</h3>';
-                    html += '<p class="color-red">';
-                    html += items.description.replace("Champions", zoomToString('Champions'));
-                    html += '</p>';
-                    html += '<a href="' + items.link + '">Xem thêm</a>';
-                    html += '</div>';
-                    html += '</div>';
-                });
-                $('#box').html(html);
-                hoverTitle();
-            }
-        });
-    };
+// load class Route
+$router = new Core\Http\Route();
+include_once PATH_ROOT . '/app/routes.php';
 
-    $(() => {
-        loadData();
-        setInterval(() => {
-            loadData();
-        }, 30000)
 
-    });
-</script>
-</html>
+// Lấy url hiện tại của trang web. Mặc định la /
+$request_url = !empty($_GET['url']) ? '/' . $_GET['url'] : '/';
+// Lấy phương thức hiện tại của url đang được gọi. (GET | POST). Mặc định là GET.
+$method_url = !empty($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+
+// map URL
+$router->map($request_url, $method_url);

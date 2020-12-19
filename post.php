@@ -2,7 +2,10 @@
 
 class Post
 {
-//    function  _
+    /**
+     * Trả về data : json_encode
+     * @return false|string
+     */
     public function getDataPost()
     {
         $url = 'https://vnexpress.net/the-thao';
@@ -19,6 +22,11 @@ class Post
         return $json_data;
     }
 
+    /**
+     * html to string
+     * @param $html
+     * @return false|string
+     */
     private function html_to_obj($html)
     {
         $dom = new DOMDocument('1.0', 'UTF-8');
@@ -26,6 +34,11 @@ class Post
         return $this->element_to_obj($dom);
     }
 
+    /**
+     * element to obj => json_encode
+     * @param $dom
+     * @return false|string
+     */
     private function element_to_obj($dom)
     {
         $data = [];
